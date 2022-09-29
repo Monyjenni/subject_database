@@ -38,6 +38,7 @@ class HelloController {
         Field(1,"Programming",1,proInfo1Programming),
         Field(2,"OOP",2,proInfo2OOP),
         Field (3,"Electronic",3,proInfo3Electronic)
+
     )
 
     var profList = scienceDepList + socialDepList
@@ -49,6 +50,9 @@ class HelloController {
 
         tempList.addAll(socialDepList)
 
+        //val myList: MutableList<String> = ArrayList()
+        var myList = tempList.toMutableList()
+
         return tempList.sortedByDescending { it.rank}
     }
 
@@ -58,6 +62,46 @@ class HelloController {
 
     }
 
+    @GetMapping ("professors/{professorInfoId}")
+    fun getProfbyId (@PathVariable ("professorInfoId") professorInfoId:Int ): String {
+        val kru = profList.find{it.id == professorInfoId}
+
+        var isIdFound = false
+
+        for (id in profList)
+            if (id.id == professorInfoId){
+                isIdFound = true
+            }
+        if (isIdFound){
+            return Message (
+                data = profList,
+
+                message = "found "
+            ).toString()
+
+        }else {
+            return Message (
+                data = profList,
+                //message = profList.toString() + "not found "
+                    //).toString()
+                message = "has not found").toString()
+        }
+    }
+
+//    @GetMapping("/categories/{id}")
+//    fun getAllBooksByCategory(@PathVariable("id") categoryId: Int): Total{
+//        val foundBooks = bookList.filter { it.categorize.id == categoryId }
+//
+//
+//
+//        //println("There is total ${foundBooks.count()} books")
+//
+//        return Total(
+//            data = foundBooks,
+//            message = "The total is ${foundBooks.count()}"
+//        )
+//    }
+
 
     @PostMapping ("/post")
     fun postProf (@RequestBody name: Field) : List <Field>{
@@ -66,6 +110,14 @@ class HelloController {
         return profList
 
     }
+
+//    @PostMapping ("/post/ranks")
+//    fun postProfRank (@RequestBody name: Field) : List <Field>{
+//        myList = myList.plus(name)
+//
+//        return myList
+//
+//    }
 
     @DeleteMapping ("professors/delete/{id}")
     fun deletePro (@PathVariable id:Int): String{
@@ -87,14 +139,16 @@ class HelloController {
 
     }
 
-//    @PutMapping ("/professors/put/ranking/{id}")
-//    fun updateProf (@PathVariable id:Int, @RequestBody professor: Field) : String {
-//        val findProf =
-//    }
 
 }
+data class Message (
+    val data : List<Field>?,
+    val message : String
+        )
 
 data class Response (
     val data: List <Field>,
     val message: String
         )
+
+
