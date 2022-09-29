@@ -43,6 +43,8 @@ class HelloController {
 
     var profList = scienceDepList + socialDepList
 
+    val helloWorld = "Hello World!"
+
     //how can we edit on this tempList
     @GetMapping ("professors/ranks")
     fun getRanks (): List<Field>{
